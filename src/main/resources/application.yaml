@@ -1,0 +1,4 @@
+spring:
+  application:
+    name: loginkey
+version: 4.15
