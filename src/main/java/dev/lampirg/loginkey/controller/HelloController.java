@@ -1,5 +1,6 @@
 package dev.lampirg.loginkey.controller;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -7,7 +8,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloController {
 
     @PostMapping("/login")
-    public void hello() {
+    public void login() {
         // Authenticating
+    }
+
+    @GetMapping
+    public String hello() {
+        return "hello!";
     }
 }
