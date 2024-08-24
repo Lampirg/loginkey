@@ -26,6 +26,10 @@ public class UserDtoAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws AuthenticationException, IOException, ServletException {
         Authentication authentication = userWithVersionConverter.convert(request);
+        if (authentication == null) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         try {
             authentication = authenticationManager.authenticate(authentication);
         } catch (UsernameNotFoundException e) {
@@ -37,8 +41,8 @@ public class UserDtoAuthenticationFilter extends OncePerRequestFilter {
         }
         if (authentication.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            filterChain.doFilter(request, response);
         }
+        filterChain.doFilter(request, response);
     }
 
 }
