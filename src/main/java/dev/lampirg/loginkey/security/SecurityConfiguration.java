@@ -34,6 +34,8 @@ public class SecurityConfiguration {
                 .addFilterAt(authenticationFilter,
                         UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(registry -> registry
+                        .requestMatchers("/protected").hasRole("HCKR")
+                        .requestMatchers("/jojo").hasRole("JOJO")
                         .anyRequest().authenticated())
                 .anonymous(AbstractHttpConfigurer::disable)
                 .securityContext(conf -> conf
@@ -58,6 +60,7 @@ public class SecurityConfiguration {
     public UserDetailsService userDetailsService() {
         return new InMemoryUserDetailsManager(User.withUsername("hohol")
                 .password(passwordEncoder().encode("joja"))
+                .roles("JOJO")
                 .build());
     }
 

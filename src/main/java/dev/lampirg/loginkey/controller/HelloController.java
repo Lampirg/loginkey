@@ -12,6 +12,16 @@ public class HelloController {
         // Authenticating
     }
 
+    @PostMapping("/jojo")
+    public void forJojo() {
+        // Authenticating
+    }
+
+    @PostMapping("/protected")
+    public void protectedPage() {
+        // Authenticating
+    }
+
     @GetMapping
     public String hello() {
         return "hello!";
