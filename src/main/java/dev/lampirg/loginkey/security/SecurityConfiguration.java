@@ -1,6 +1,7 @@
 package dev.lampirg.loginkey.security;
 
 import dev.lampirg.loginkey.security.filter.ConcurrentSessionApiHeaderBasedFilter;
+import dev.lampirg.loginkey.security.filter.SessionVerifyFilter;
 import dev.lampirg.loginkey.security.filter.UserDtoAuthenticationFilter;
 import dev.lampirg.loginkey.security.session.ConcurrentSessionApiHeaderBasedAuthenticationStrategy;
 import dev.lampirg.loginkey.security.session.RegisterApiHeaderSession;
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.context.SecurityContextRepository;
@@ -25,6 +27,7 @@ public class SecurityConfiguration {
 
     private final UserDtoAuthenticationFilter authenticationFilter;
     private final ConcurrentSessionApiHeaderBasedFilter concurrentSessionFilter;
+    private final SessionVerifyFilter sessionVerifyFilter;
 
     private final RegisterApiHeaderSession registerApiHeaderSession;
     private final ConcurrentSessionApiHeaderBasedAuthenticationStrategy concurrentStrategy;
@@ -36,6 +39,7 @@ public class SecurityConfiguration {
         return httpSecurity
                 .addFilterAt(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAt(concurrentSessionFilter, ConcurrentSessionFilter.class)
+                .addFilterBefore(sessionVerifyFilter, AuthorizationFilter.class)
                 .authorizeHttpRequests(registry -> registry
                         .requestMatchers("/protected").hasRole("HCKR")
                         .requestMatchers("/jojo").hasRole("JOJO")
