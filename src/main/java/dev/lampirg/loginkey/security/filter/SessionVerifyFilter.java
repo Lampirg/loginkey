@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextHolderStrategy;
@@ -14,6 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @Component
 public class SessionVerifyFilter extends OncePerRequestFilter {
@@ -42,6 +44,8 @@ public class SessionVerifyFilter extends OncePerRequestFilter {
         if (!clientVersion.equals(version)) {
             String message = "Invalid version. Expected " + version + " got " + clientVersion;
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.setContentType(MediaType.TEXT_PLAIN_VALUE);
+            response.setCharacterEncoding(StandardCharsets.UTF_8.displayName());
             response.getWriter().println(message);
         }
     }
