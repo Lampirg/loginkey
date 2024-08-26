@@ -8,22 +8,27 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloController {
 
     @PostMapping("/login")
-    public void login() {
-        // Authenticating
+    public String login() {
+        return "login";
     }
 
     @PostMapping("/jojo")
-    public void forJojo() {
-        // Authenticating
+    public String forJojo() {
+        return "JoJo Bizzare Adventure";
     }
 
     @PostMapping("/protected")
-    public void protectedPage() {
-        // Authenticating
+    public String protectedPage() {
+        return "It's me! PROTECTED DIO!";
+    }
+
+    @GetMapping("/hello")
+    public String hello() {
+        return "hello!";
     }
 
     @GetMapping
-    public String hello() {
-        return "hello!";
+    public String home() {
+        return "redirect:/hello";
     }
 }
