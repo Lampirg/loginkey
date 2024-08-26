@@ -76,6 +76,16 @@ class AuthenticationTest {
                 MockMvcResultMatchers.content().string("Username not found"));
     }
 
+    @Test
+    void givenForbidden() throws Exception {
+        Resource json = new ClassPathResource("logins/correct.json");
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/protected")
+                        .content(json.getContentAsByteArray())
+                )
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
     private void testWithJsonStatusAndResponseAsserter(String path, HttpStatus status, ResultMatcher string) throws Exception {
         Resource json = new ClassPathResource(path);
         mockMvc.perform(MockMvcRequestBuilders
