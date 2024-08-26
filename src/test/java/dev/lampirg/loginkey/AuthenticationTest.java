@@ -2,6 +2,7 @@ package dev.lampirg.loginkey;
 
 import dev.lampirg.loginkey.controller.HelloController;
 import dev.lampirg.test.loginkey.SecurityScanningConfiguration;
+import dev.lampirg.test.loginkey.WithMockVersionedUser;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,10 @@ class AuthenticationTest {
 
     @Autowired
     private MockMvc mockMvc;
-    private Resource json;
 
     @Test
     void givenNoBody() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/login")
-                )
+        mockMvc.perform(MockMvcRequestBuilders.post("/login"))
                 .andExpect(MockMvcResultMatchers.status().isUnauthorized());
     }
 
@@ -37,6 +35,13 @@ class AuthenticationTest {
     void givenCorrectLogin() throws Exception {
         testWithJsonStatusAndResponseAsserter("logins/correct.json", HttpStatus.OK,
                 MockMvcResultMatchers.header().string("Auth", Matchers.hasLength(15)));
+    }
+
+    @Test
+    @WithMockVersionedUser
+    void givenCorrectLoginWithMockUser() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/login"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
@@ -58,13 +63,21 @@ class AuthenticationTest {
     }
 
     @Test
+    @WithMockVersionedUser(version = "0.7")
+    void givenIncorrectVersionWithMockUser() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/hello"))
+                .andExpect(MockMvcResultMatchers.status().isForbidden())
+                .andExpect(MockMvcResultMatchers.content().string("Invalid version. Expected 1.0 got 0.7"));
+    }
+
+    @Test
     void givenAllIncorrect() throws Exception {
         testWithJsonStatusAndResponseAsserter("logins/no-all.json", HttpStatus.UNAUTHORIZED,
                 MockMvcResultMatchers.content().string("Username not found"));
     }
 
     private void testWithJsonStatusAndResponseAsserter(String path, HttpStatus status, ResultMatcher string) throws Exception {
-        json = new ClassPathResource(path);
+        Resource json = new ClassPathResource(path);
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/login")
                         .content(json.getContentAsByteArray())
