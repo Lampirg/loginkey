@@ -46,7 +46,7 @@ public class SessionVerifyFilter extends OncePerRequestFilter {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.setContentType(MediaType.TEXT_PLAIN_VALUE);
             response.setCharacterEncoding(StandardCharsets.UTF_8.displayName());
-            response.getWriter().println(message);
+            response.getWriter().print(message);
         }
     }
 }

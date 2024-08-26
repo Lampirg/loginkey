@@ -49,7 +49,7 @@ public class UserDtoAuthenticationFilter extends OncePerRequestFilter {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType(MediaType.TEXT_PLAIN_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.displayName());
-        response.getWriter().println(e);
+        response.getWriter().print(e);
     }
 
 }
