@@ -32,7 +32,7 @@ public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
         UserWithVersionAuthenticationToken withVersion = (UserWithVersionAuthenticationToken) authentication;
         UserDetails userDetails = userDetailsService.loadUserByUsername(withVersion.getPrincipal().toString());
         if (!passwordEncoder.matches(withVersion.getCredentials().toString(), userDetails.getPassword())) {
-            throw new BadCredentialsException("password is invalid");
+            throw new BadCredentialsException("Password is invalid");
         }
         return new UserWithVersionAuthenticationToken(withVersion.getPrincipal(), withVersion.getCredentials(),
                 userDetails.getAuthorities(), withVersion.getVersion());
