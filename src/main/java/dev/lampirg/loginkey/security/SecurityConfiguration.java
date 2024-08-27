@@ -68,7 +68,7 @@ public class SecurityConfiguration {
                 .requestCache(conf -> conf.requestCache(new NullRequestCache()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .anonymous(AbstractHttpConfigurer::disable)
-                .build(); // wujQOmNdUBQ7fFI EZzZi13HDM4kvme
+                .build();
     }
 
 }
